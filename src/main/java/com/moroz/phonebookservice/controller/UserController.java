@@ -8,6 +8,7 @@ import com.moroz.phonebookservice.domain.Views;
 import com.moroz.phonebookservice.exceptions.BadRequestException;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class UserController {
 
     @GetMapping
     @JsonView(Views.IdName.class)
-    public List<User> getUser(@RequestParam(value="name", required = false, defaultValue="") String name) {
+    public List<User> getUsers(@RequestParam(value="name", required = false, defaultValue="") String name) {
         if(name.isEmpty()) {
             return userDAO.getAllUsers();
         } else {
@@ -54,21 +55,21 @@ public class UserController {
     }
 
     @PostMapping
-    public User addUser(@RequestParam(value="name") String name) {
+    public boolean addUser(@RequestParam(value="name") String name) {
         return userDAO.createUser(name);
     }
 
     @PostMapping("{id}/phoneBook")
-    public Pair<PhoneNumber, String> addContactToUserPhoneBook(@PathVariable Long id,
+    public boolean addContactToUserPhoneBook(@PathVariable Long id,
                                                                @RequestParam(value="contactName") String contactName,
                                                                @RequestBody PhoneNumber phoneNumber) {
         return userDAO.addContactToUserPhoneBook(id, phoneNumber, contactName);
     }
 
     @PutMapping("{id}")
-    public User renameUser(@PathVariable Long id,
+    public void renameUser(@PathVariable Long id,
                            @RequestParam(value="name") String name) {
-        return userDAO.renameUser(id, name);
+        userDAO.renameUser(id, name);
     }
 
     @PutMapping("{id}/phoneBook/phone")

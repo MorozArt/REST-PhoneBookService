@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class User {
 
@@ -40,12 +41,18 @@ public class User {
         return phoneBook;
     }
 
-    public void addContactToPhoneBook(PhoneNumber phoneNumber, String contactName) {
-        phoneBook.put(phoneNumber, contactName);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(name, user.name);
     }
 
-    public void deleteContactFromPhoneBook(PhoneNumber phoneNumber) {
-        phoneBook.remove(phoneNumber);
+    @Override
+    public int hashCode() {
 
+        return Objects.hash(id, name);
     }
 }

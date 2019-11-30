@@ -21,11 +21,11 @@ public interface UserDAO {
 
     Pair<PhoneNumber, String> getContactByPhoneNumber(Long id, PhoneNumber phoneNumber);
 
-    Pair<PhoneNumber, String> addContactToUserPhoneBook(Long id, PhoneNumber phoneNumber, String contactName);
+    boolean addContactToUserPhoneBook(Long id, PhoneNumber phoneNumber, String contactName);
 
-    User createUser(String name);
+    boolean createUser(String name);
 
-    User renameUser(Long id, String newName);
+    void renameUser(Long id, String newName);
 
     Pair<PhoneNumber, String> updatePhoneNumber(Long id, PhoneNumber currentPhoneNumber, PhoneNumber newPhoneNumber,
                                                 String newContactName);

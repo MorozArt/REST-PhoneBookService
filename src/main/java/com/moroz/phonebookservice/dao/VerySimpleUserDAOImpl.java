@@ -12,7 +12,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component("userDAO")
-@Scope("singleton")
 public class VerySimpleUserDAOImpl implements UserDAO {
 
     private static Long ID_COUNT = 0L;
@@ -20,20 +19,20 @@ public class VerySimpleUserDAOImpl implements UserDAO {
     {
         User user = new User("John Pierce");
         user.setId(ID_COUNT++);
-        user.addContactToPhoneBook(new PhoneNumber(7, 911, 8302832), "Walter Rodgers");
-        user.addContactToPhoneBook(new PhoneNumber(7, 961, 2649160), "Karen Reynolds");
+        user.getPhoneBook().put(new PhoneNumber(7, 911, 8302832), "Walter Rodgers");
+        user.getPhoneBook().put(new PhoneNumber(7, 961, 2649160), "Karen Reynolds");
         users.add(user);
 
         user = new User("Walter Rodgers");
         user.setId(ID_COUNT++);
-        user.addContactToPhoneBook(new PhoneNumber(7, 921, 2384529), "John Pierce");
-        user.addContactToPhoneBook(new PhoneNumber(7, 961, 2649160), "Karen Reynolds");
+        user.getPhoneBook().put(new PhoneNumber(7, 921, 2384529), "John Pierce");
+        user.getPhoneBook().put(new PhoneNumber(7, 961, 2649160), "Karen Reynolds");
         users.add(user);
 
         user = new User("Karen Reynolds");
         user.setId(ID_COUNT++);
-        user.addContactToPhoneBook(new PhoneNumber(7, 921, 2384529), "John Pierce");
-        user.addContactToPhoneBook(new PhoneNumber(7, 911, 8302832), "Walter Rodgers");
+        user.getPhoneBook().put(new PhoneNumber(7, 921, 2384529), "John Pierce");
+        user.getPhoneBook().put(new PhoneNumber(7, 911, 8302832), "Walter Rodgers");
         users.add(user);
     }
 
@@ -82,25 +81,31 @@ public class VerySimpleUserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User createUser(String name) {
+    public boolean createUser(String name) {
         User newUser = new User(name);
         newUser.setId(ID_COUNT++);
+
+        if(users.contains(newUser)) {
+            return false;
+        }
         users.add(newUser);
-        return newUser;
+        return true;
     }
 
     @Override
-    public Pair<PhoneNumber, String> addContactToUserPhoneBook(Long id, PhoneNumber phoneNumber, String contactName) {
-        User user = getUser(id);
-        user.addContactToPhoneBook(phoneNumber, contactName);
-        return new Pair<>(phoneNumber, contactName);
+    public boolean addContactToUserPhoneBook(Long id, PhoneNumber phoneNumber, String contactName) {
+        Map<PhoneNumber, String> userPhoneBook = getUser(id).getPhoneBook();
+        if(userPhoneBook.containsKey(phoneNumber)) {
+            return false;
+        }
+        userPhoneBook.put(phoneNumber, contactName);
+        return true;
     }
 
     @Override
-    public User renameUser(Long id, String newName) {
+    public void renameUser(Long id, String newName) {
         User renamedUser = getUser(id);
         renamedUser.setName(newName);
-        return renamedUser;
     }
 
     @Override
