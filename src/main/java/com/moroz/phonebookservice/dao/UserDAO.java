@@ -21,9 +21,9 @@ public interface UserDAO {
 
     Pair<PhoneNumber, String> getContactByPhoneNumber(Long id, PhoneNumber phoneNumber);
 
-    boolean addContactToUserPhoneBook(Long id, PhoneNumber phoneNumber, String contactName);
+    Map<PhoneNumber, String> addContactToUserPhoneBook(Long id, PhoneNumber phoneNumber, String contactName);
 
-    boolean createUser(String name);
+    User createUser(String name);
 
     void renameUser(Long id, String newName);
 

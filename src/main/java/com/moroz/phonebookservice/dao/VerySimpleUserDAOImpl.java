@@ -81,25 +81,25 @@ public class VerySimpleUserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean createUser(String name) {
+    public User createUser(String name) {
         User newUser = new User(name);
         newUser.setId(ID_COUNT++);
 
         if(users.contains(newUser)) {
-            return false;
+            return null;
         }
         users.add(newUser);
-        return true;
+        return newUser;
     }
 
     @Override
-    public boolean addContactToUserPhoneBook(Long id, PhoneNumber phoneNumber, String contactName) {
+    public Map<PhoneNumber, String> addContactToUserPhoneBook(Long id, PhoneNumber phoneNumber, String contactName) {
         Map<PhoneNumber, String> userPhoneBook = getUser(id).getPhoneBook();
         if(userPhoneBook.containsKey(phoneNumber)) {
-            return false;
+            return null;
         }
         userPhoneBook.put(phoneNumber, contactName);
-        return true;
+        return userPhoneBook;
     }
 
     @Override

@@ -55,12 +55,12 @@ public class UserController {
     }
 
     @PostMapping
-    public boolean addUser(@RequestParam(value="name") String name) {
+    public User addUser(@RequestParam(value="name") String name) {
         return userDAO.createUser(name);
     }
 
     @PostMapping("{id}/phoneBook")
-    public boolean addContactToUserPhoneBook(@PathVariable Long id,
+    public Map<PhoneNumber, String> addContactToUserPhoneBook(@PathVariable Long id,
                                                                @RequestParam(value="contactName") String contactName,
                                                                @RequestBody PhoneNumber phoneNumber) {
         return userDAO.addContactToUserPhoneBook(id, phoneNumber, contactName);
